@@ -1,21 +1,18 @@
-FROM komljen/ubuntu
-MAINTAINER Alen Komljen <alen.komljen@live.com>
-
-ENV USER root
-ENV PASS aiPeekai0AeZ2meephoolais7doo1thu
-
-RUN \
-  apt-get update && \
-  apt-get -y install \
-          mysql-server-5.5 && \
-  rm -rf /var/lib/apt/lists/*
-
-COPY my.cnf /etc/mysql/my.cnf
-COPY start.sh start.sh
-
-VOLUME ["/var/lib/mysql"]
-
-RUN rm /usr/sbin/policy-rc.d
-CMD ["/start.sh"]
-
-EXPOSE 3306
+#VERSION 0.0.1
+FROM daocloud.io/bigtiger02/ubuntu:master-320e1fa 
+MAINTAINER tiger "bigtiger02@gmail.com"
+#安装nodejs
+RUN   \
+  cd /opt && \
+  wget http://nodejs.org/dist/v0.10.28/node-v0.10.28-linux-x64.tar.gz && \
+  tar -xzf node-v0.10.28-linux-x64.tar.gz && \
+  mv node-v0.10.28-linux-x64 node && \
+  cd /usr/local/bin && \
+  ln -s /opt/node/bin/* . && \
+  rm -f /opt/node-v0.10.28-linux-x64.tar.gz
+#安装npm
+RUN apt-get install -y npm;
+#设置npm源
+RUN npm config set registry http://registry.cnpmjs.org;
+#安装forever
+RUN npm install forever -g;
