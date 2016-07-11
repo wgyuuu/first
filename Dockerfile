@@ -1,18 +1,12 @@
-#VERSION 0.0.1
-FROM daocloud.io/bigtiger02/ubuntu:master-320e1fa 
-MAINTAINER tiger "bigtiger02@gmail.com"
-#安装nodejs
-RUN   \
-  cd /opt && \
-  wget http://nodejs.org/dist/v0.10.28/node-v0.10.28-linux-x64.tar.gz && \
-  tar -xzf node-v0.10.28-linux-x64.tar.gz && \
-  mv node-v0.10.28-linux-x64 node && \
-  cd /usr/local/bin && \
-  ln -s /opt/node/bin/* . && \
-  rm -f /opt/node-v0.10.28-linux-x64.tar.gz
-#安装npm
-RUN apt-get install -y npm;
-#设置npm源
-RUN npm config set registry http://registry.cnpmjs.org;
-#安装forever
-RUN npm install forever -g;
+#version 1.0.1
+FROM  daocloud.io/bigtiger02/ubuntu:master-320e1fa
+RUN \
+  apt-get install -y --allow-unauthenticated --no-install-recommends software-properties-common python-software-properties \
+  && add-apt-repository -y ppa:webupd8team/java \
+  && echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
+  && echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections \
+  && apt-get install -y oracle-java7-installer \
+  && add-apt-repository -y --remove ppa:webupd8team/java \
+  && apt-get purge -y --auto-remove python-software-properties software-properties-common python python3 perl \
+  && apt-get clean -y \
+  && rm -rf /var/cache/oracle-jdk7-installer
